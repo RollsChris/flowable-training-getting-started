@@ -1,6 +1,7 @@
 package com.flowable.gsd.work.services;
 
 import org.apache.commons.validator.CreditCardValidator;
+import org.flowable.engine.delegate.BpmnError;
 import org.springframework.stereotype.Service;
 
 @Service("creditCardService")
@@ -14,7 +15,14 @@ public class CreditCardService {
 
     public boolean isValid(String creditCardNumber){
         CreditCardValidator validator = new CreditCardValidator();
-        return validator.isValid(creditCardNumber);
+
+        boolean isValid = validator.isValid(creditCardNumber);
+
+        if(!isValid){
+            throw new BpmnError("invalidCreditCard", "Credit card is invalid");
+        }
+
+        return isValid;
     }
     
 }
